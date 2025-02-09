@@ -1,8 +1,11 @@
-import { Controller,Post,Body,Get, Param, Delete, Patch, ParseIntPipe } from '@nestjs/common';
+import { Controller,Post,Body,Get, Param, Delete, Patch, ParseIntPipe, UseGuards, Req } from '@nestjs/common';
 import { MemoJamService } from './memo-jam.service';
 import { MemoPostReqDto } from 'src/dto/memo.post.req.dto';
 import { MemoUpdateDto } from 'src/dto/memo.update.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { Request } from '@nestjs/common';
 
+@UseGuards(AuthGuard)
 @Controller('memo-jam')
 export class MemoJamController {
     private memoService:MemoJamService;
@@ -11,28 +14,33 @@ export class MemoJamController {
     }
 
     @Post()
-    createMemo(@Body() memoPostReqDto:MemoPostReqDto){
-        return this.memoService.createMemo(memoPostReqDto);
+    createMemo(@Request()req, @Body()memoPostReqDto:MemoPostReqDto){
+        const userId=req.user.id;
+        return this.memoService.createMemo(userId,memoPostReqDto);
     }
 
     @Get()
-    findAllMemo(){
-        return this.memoService.findAllMemo();
+    findUserAllMemo(@Request()req){
+        const userId=req.user.id;
+        return this.memoService.findUserAllMemo(userId);
     }
 
     @Get(':id')
-    findOneMemo(@Param('id') id:number){
-        return this.memoService.findOneMemo(id);
+    findUserOneMemo(@Request()req, @Param('id') id:number){
+        const userId=req.user.id;
+        return this.memoService.findUserOneMemo(userId,id);
     }
 
     @Patch()
-    updateMemo(@Param('id') id:number, @Body() memoUpdateDto:MemoUpdateDto){
-        return this.memoService.updateMemo(id,memoUpdateDto);
+    updateMemo(@Request()req, @Param('id') id:number, @Body() memoUpdateDto:MemoUpdateDto){
+        const userId=req.user.id;
+        return this.memoService.updateMemo(userId,id,memoUpdateDto);
     }
 
     @Delete()
-    removeMemo(@Param('id') id:number){
-        return this.memoService.removeMemo(id);
+    removeMemo(@Request()req, @Param('id') id:number){
+        const userId=req.user.id;
+        return this.memoService.removeMemo(userId,id);
     }
 
 

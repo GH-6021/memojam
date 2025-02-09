@@ -12,11 +12,11 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mariadb',
-      host: 'localhost',
+      host: '127.0.0.1',
       port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'test',
+      username: 'test',
+      password: 'test',
+      database: 'memojam',
       entities: [Memo,User],
       synchronize: true,
     })
