@@ -1,7 +1,5 @@
 import { Injectable, NotFoundException, UseInterceptors } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { error } from 'console';
-import { NotFoundError } from 'rxjs';
 import { ErrorType } from 'src/auth/constants';
 import { MemoPostReqDto } from 'src/dto/memo.post.req.dto';
 import { MemoUpdateDto } from 'src/dto/memo.update.dto';

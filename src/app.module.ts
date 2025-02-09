@@ -13,7 +13,7 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forRoot({
       type: 'mariadb',
       host: '127.0.0.1',
-      port: 3306,
+      port: 3307,
       username: 'test',
       password: 'test',
       database: 'memojam',
