@@ -4,6 +4,8 @@ import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 import { UserPostReqDto } from 'src/dto/user.post.req.dto';
 import { ErrorType } from 'src/auth/constants';
+import * as bcrypt from 'bcrypt';
+import { bcryptConstant } from 'src/auth/constants';
 
 @Injectable()
 export class UserService {
@@ -13,11 +15,21 @@ export class UserService {
     ){}
     
     async createUser(userPostReqDto:UserPostReqDto){
-        return await this.userRepository.save(userPostReqDto);
+        userPostReqDto.password= await bcrypt.hash(userPostReqDto.password, bcryptConstant.saltOrRounds);
+        const {password, ...result} = await this.userRepository.save(userPostReqDto);
+        return await result;
     }
 
     async findOneUser(id:number):Promise<User>{
         const user=this.userRepository.findOneBy({id});
+        if(!user){
+            throw new NotFoundException(ErrorType.USER_NOT_FOUND);
+        }
+        return user;
+    }
+
+    async findAllUser(){
+        const user=this.userRepository.find();
         if(!user){
             throw new NotFoundException(ErrorType.USER_NOT_FOUND);
         }

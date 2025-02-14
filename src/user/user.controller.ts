@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserPostReqDto } from 'src/dto/user.post.req.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from '@nestjs/common';
 
 @Controller('user')
@@ -16,13 +15,19 @@ export class UserController {
         return this.userSerivce.createUser(userPostReqDto);
     }
 
-    @Get(':id')
     findOneUser(@Param('id') id:number){
         return this.userSerivce.findOneUser(id);
     }
 
-    @UseGuards(AuthGuard)
-    removeUser(@Request() req){
-        return this.userSerivce.removeUser(req);
-    }
+    // //관리자 권한 주는법..
+    // @Get()
+    // findAllUser(){
+    //     return this.userSerivce.findAllUser();
+    // }
+
+
+    // @Delete(':id')
+    // removeUser(@Param('id')id:number){
+    //     return this.userSerivce.removeUser(id);
+    // }
 }

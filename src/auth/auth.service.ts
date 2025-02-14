@@ -1,7 +1,7 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
-import { ErrorType } from './constants';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -10,14 +10,30 @@ export class AuthService {
         private jwtService:JwtService
     ) {}
 
-    async signIn(id:number,pw:string): Promise<{ access_token: string }>{
-        const user = await this.userService.findOneUser(id);
-        if(user.password !== pw){
-            throw new UnauthorizedException(ErrorType.INVALID_PASSWORD);
+    async validateUser(id:number, pw:string){
+        const user= await this.userService.findOneUser(id);
+        const isValidPw= await bcrypt.compare(pw, user.password);
+        if(isValidPw){
+            const {password, ...result}= user;
+            return result;
         }
+        return null;
+    }
+
+    async login(user:any){
         const payload={id:user.id, name:user.name};
+        const accessToken = this.jwtService.sign(payload, { expiresIn: '300s' });
+        const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
+        return{
+            accessToken,
+            refreshToken,
+        };
+    }
+
+    async refresh(refresh:string){
+        const payload=this.jwtService.decode(refresh);
         return {
-            access_token: await this.jwtService.signAsync(payload),
+            newAccessToken: this.jwtService.sign({id:payload.id, name:payload.name},{expiresIn: '300s'})
         };
     }
 }

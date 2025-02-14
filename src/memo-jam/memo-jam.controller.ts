@@ -1,11 +1,11 @@
-import { Controller,Post,Body,Get, Param, Delete, Patch, ParseIntPipe, UseGuards, Req } from '@nestjs/common';
+import { Controller,Post,Body,Get, Param, Delete, Patch, Request } from '@nestjs/common';
 import { MemoJamService } from './memo-jam.service';
 import { MemoPostReqDto } from 'src/dto/memo.post.req.dto';
 import { MemoUpdateDto } from 'src/dto/memo.update.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { Request } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('memo-jam')
 export class MemoJamController {
     private memoService:MemoJamService;
