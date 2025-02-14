@@ -27,11 +27,5 @@ export class AuthController {
         return this.authSerivce.refresh(refreshToken);
     }
 
-    @UseGuards(JwtAuthGuard)
-    @Get('profile')
-    getProfile(@Request()req){
-        return req.user;
-    }
-
     //logout은 어떻게..? refresh token삭제
 }

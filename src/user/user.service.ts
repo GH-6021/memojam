@@ -17,7 +17,10 @@ export class UserService {
     async createUser(userPostReqDto:UserPostReqDto){
         userPostReqDto.password= await bcrypt.hash(userPostReqDto.password, bcryptConstant.saltOrRounds);
         const {password, ...result} = await this.userRepository.save(userPostReqDto);
-        return await result;
+        return {
+            message:"user 생성 성공",
+            user: result,
+        }
     }
 
     async findOneUser(id:number):Promise<User>{
@@ -28,19 +31,19 @@ export class UserService {
         return user;
     }
 
-    async findAllUser(){
-        const user=this.userRepository.find();
-        if(!user){
-            throw new NotFoundException(ErrorType.USER_NOT_FOUND);
-        }
-        return user;
-    }
+    // async findAllUser(){
+    //     const user=this.userRepository.find();
+    //     if(!user){
+    //         throw new NotFoundException(ErrorType.USER_NOT_FOUND);
+    //     }
+    //     return user;
+    // }
     
-    async removeUser(id:number){
-        const user=this.userRepository.findOneBy({id});
-        if(!user){
-            throw new NotFoundException(ErrorType.USER_NOT_FOUND);
-        }
-        return await this.userRepository.delete({id});
-    }
+    // async removeUser(id:number){
+    //     const user=this.userRepository.findOneBy({id});
+    //     if(!user){
+    //         throw new NotFoundException(ErrorType.USER_NOT_FOUND);
+    //     }
+    //     return await this.userRepository.delete({id});
+    // }
 }

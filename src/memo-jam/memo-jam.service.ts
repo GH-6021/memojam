@@ -26,6 +26,7 @@ export class MemoJamService {
         const user = await this.userService.findOneUser(userId);
         const memo= await this.memoRepository.create({...memoPostReqDto,user});
         await this.memoRepository.save(memo);
+        return {messege:"메모 작성 성공"}
     }
 
     //해당 유저가 작성한 모든 메모 열람
@@ -52,14 +53,13 @@ export class MemoJamService {
         return memo;
     }
 
-    //memo와user 엔티티 join했는데 이러면 user값 바꿀수도..? title과content값만 건드렸으면 함..
     async updateMemo(userId:number,id:number,memoUpdateDto:MemoUpdateDto){
         await this.userService.findOneUser(userId);
         const memo=await this.memoRepository.findOneBy({id});
-        if(!memo){ //!memo의 의미.. 공백? 잘못된 json값 에러처리 어케하더라 dto에서 설정..?
+        if(!memo){
             throw new NotFoundException(ErrorType.MEMO_NOT_FOUND);
         }
-        return this.userRepository.update(id,memoUpdateDto);
+        return this.memoRepository.update(id,memoUpdateDto);
     }
 
     async removeMemo(userId:number,id:number){
@@ -68,6 +68,7 @@ export class MemoJamService {
         if(!memo){
             throw new NotFoundException(ErrorType.MEMO_NOT_FOUND);
         }
-        return this.userRepository.delete(id);
+        await this.memoRepository.delete(id);
+        return {message:"메모 삭제 완료"};
     }
 }

@@ -31,13 +31,13 @@ export class MemoJamController {
         return this.memoService.findUserOneMemo(userId,id);
     }
 
-    @Patch()
+    @Patch(':id')
     updateMemo(@Request()req, @Param('id') id:number, @Body() memoUpdateDto:MemoUpdateDto){
         const userId=req.user.id;
         return this.memoService.updateMemo(userId,id,memoUpdateDto);
     }
 
-    @Delete()
+    @Delete(':id')
     removeMemo(@Request()req, @Param('id') id:number){
         const userId=req.user.id;
         return this.memoService.removeMemo(userId,id);
