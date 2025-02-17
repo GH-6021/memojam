@@ -16,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
       port: 3307,
       username: 'test',
       password: 'test',
+      
       database: 'memojam',
       entities: [Memo,User],
       synchronize: true,
