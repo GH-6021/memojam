@@ -4,9 +4,10 @@ import { MemoJamService } from './memo-jam.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Memo } from 'src/entity/memo.entity';
 import { UserModule } from 'src/user/user.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Memo]),UserModule],
+  imports: [TypeOrmModule.forFeature([Memo]),UserModule,AuthModule],
   controllers: [MemoJamController],
   providers: [MemoJamService]
 })

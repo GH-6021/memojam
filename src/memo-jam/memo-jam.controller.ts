@@ -3,9 +3,9 @@ import { MemoJamService } from './memo-jam.service';
 import { MemoPostReqDto } from 'src/dto/memo.post.req.dto';
 import { MemoUpdateDto } from 'src/dto/memo.update.dto';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
+import { AccessGuard } from 'src/auth/access.guard';
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(AccessGuard)
 @Controller('memo-jam')
 export class MemoJamController {
     private memoService:MemoJamService;

@@ -1,29 +1,23 @@
-import { Controller, Body } from '@nestjs/common';
+import { Controller, Body, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UseGuards, Get, Post } from '@nestjs/common';
-import { LocalAuthGuard } from './local.auth.guard';
-import { JwtAuthGuard } from './jwt.auth.guard';
-import { Request } from '@nestjs/common';
-import { RefreshAuthGuard } from './refresh.auth.guard';
-import { UnauthorizedException } from '@nestjs/common';
+import { Post } from '@nestjs/common';
+import { AuthLoginDto } from 'src/dto/auth.login.dto';
+import { RefreshGuard } from './refresh.guard';
 
 
 @Controller('auth')
 export class AuthController {
     constructor(private authSerivce:AuthService){}
 
-    @UseGuards(LocalAuthGuard)
     @Post('login')
-    async login(@Request() req){
-        return this.authSerivce.login(req.user);
+    async login(@Body() authLoginDto:AuthLoginDto){
+        let result = await this.authSerivce.validatePw(authLoginDto.id, authLoginDto.password);
+        return this.authSerivce.login(result);
     }
 
-    @UseGuards(RefreshAuthGuard)
     @Post('refresh')
+    @UseGuards(RefreshGuard)
     async refresh(@Body('refreshToken') refreshToken: string){
-        if (!refreshToken) {
-            throw new UnauthorizedException('Refresh token is required');
-        }
         return this.authSerivce.refresh(refreshToken);
     }
 

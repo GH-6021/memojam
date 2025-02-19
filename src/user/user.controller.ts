@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserPostReqDto } from 'src/dto/user.post.req.dto';
-import { Request } from '@nestjs/common';
 
 @Controller('user')
 export class UserController {
@@ -19,11 +18,11 @@ export class UserController {
         return this.userSerivce.findOneUser(id);
     }
 
-    // //관리자 권한 주는법..
-    // @Get()
-    // findAllUser(){
-    //     return this.userSerivce.findAllUser();
-    // }
+    //관리자 권한 주는법..
+    @Get()
+    findAllUser(){
+        return this.userSerivce.findAllUser();
+    }
 
 
     // @Delete(':id')

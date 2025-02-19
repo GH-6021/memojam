@@ -1,5 +1,8 @@
-export const jwtConstants = {
-  secret: 'popcorn',
+export const RefreshConstants = {
+  secret: 'refresh',
+};
+export const accessConstants = {
+  secret: 'access',
 };
   
 export const ErrorType = {

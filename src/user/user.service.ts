@@ -24,20 +24,20 @@ export class UserService {
     }
 
     async findOneUser(id:number):Promise<User>{
-        const user=this.userRepository.findOneBy({id});
+        const user= await this.userRepository.findOneBy({id});
         if(!user){
             throw new NotFoundException(ErrorType.USER_NOT_FOUND);
         }
         return user;
     }
 
-    // async findAllUser(){
-    //     const user=this.userRepository.find();
-    //     if(!user){
-    //         throw new NotFoundException(ErrorType.USER_NOT_FOUND);
-    //     }
-    //     return user;
-    // }
+    async findAllUser(){
+        const user= this.userRepository.find();
+        if(!user){
+            throw new NotFoundException(ErrorType.USER_NOT_FOUND);
+        }
+        return user;
+    }
     
     // async removeUser(id:number){
     //     const user=this.userRepository.findOneBy({id});
