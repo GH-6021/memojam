@@ -16,11 +16,8 @@ export class UserService {
     
     async createUser(userPostReqDto:UserPostReqDto){
         userPostReqDto.password= await bcrypt.hash(userPostReqDto.password, bcryptConstant.saltOrRounds);
-        const {password, ...result} = await this.userRepository.save(userPostReqDto);
-        return {
-            message:"user 생성 성공",
-            user: result,
-        }
+        const {password, memo, ...result} = await this.userRepository.save(userPostReqDto);
+        return result;
     }
 
     async findOneUser(id:number):Promise<User>{

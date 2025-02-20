@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, UseInterceptors } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorType } from 'src/auth/constants';
 import { MemoPostReqDto } from 'src/dto/memo.post.req.dto';
-import { MemoUpdateDto } from 'src/dto/memo.update.dto';
+import { MemoUpdateDto } from 'src/dto/memo.update.res.dto';
 import { Memo } from 'src/entity/memo.entity';
 import { User } from 'src/entity/user.entity';
 import { UserService } from 'src/user/user.service';
@@ -26,7 +26,7 @@ export class MemoJamService {
         const user = await this.userService.findOneUser(userId);
         const memo= await this.memoRepository.create({...memoPostReqDto,user});
         await this.memoRepository.save(memo);
-        return {messege:"메모 작성 성공"}
+        return memoPostReqDto;
     }
 
     //해당 유저가 작성한 모든 메모 열람

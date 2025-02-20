@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { UnauthorizedException } from '@nestjs/common';
 import { accessConstants, RefreshConstants } from './constants';
 import { TokenPayloadDto } from 'src/dto/token.payload.dto';
+import { AuthRefreshReqDto } from 'src/dto/auth.refresh.req.dto';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +32,7 @@ export class AuthService {
         const refreshToken = await this.createRefreshToken(payload);
         return{
             accessToken,
-            refreshToken,
+            refreshToken
         };
     }
 
@@ -48,8 +49,8 @@ export class AuthService {
         return await this.jwtService.sign(payload, {expiresIn: '7d', secret: RefreshConstants.secret});
     }
 
-    async refresh(refresh:string){
-        const payload=this.jwtService.decode(refresh);
+    async refresh(refreshToken:string){
+        const payload= await this.jwtService.decode(refreshToken);
         return {
             newAccessToken: await this.createRefreshToken(payload)
         };

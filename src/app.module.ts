@@ -7,9 +7,10 @@ import { Memo } from './entity/memo.entity';
 import { User } from './entity/user.entity';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [
+  imports: [MemoJamModule,UserModule,AuthModule,
     TypeOrmModule.forRoot({
       type: 'mariadb',
       host: 'localhost',
@@ -20,7 +21,7 @@ import { AuthModule } from './auth/auth.module';
       entities: [Memo,User],
       synchronize: true,
     })
-    ,MemoJamModule,UserModule,AuthModule],
+    ],
   controllers: [AppController],
   providers: [AppService],
 })
