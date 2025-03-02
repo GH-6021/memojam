@@ -21,7 +21,9 @@ import { ConfigModule } from '@nestjs/config';
       entities: [Memo,User],
       synchronize: true,
     })
-    ],
+    ,ConfigModule.forRoot({
+      isGlobal:true,
+    })],
   controllers: [AppController],
   providers: [AppService],
 })

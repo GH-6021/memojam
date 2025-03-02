@@ -1,6 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { RefreshConstants } from "./constants";
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 @Injectable()
 export class RefreshGuard implements CanActivate{
@@ -15,7 +17,7 @@ export class RefreshGuard implements CanActivate{
 
         try{
             await this.jwtService.verifyAsync(refreshToken,{
-                secret: RefreshConstants.secret,
+                secret: process.env.REFRESH_SECRET,
             });
         }catch(error){
             throw new UnauthorizedException('만료되거나 잘못된 토큰입니다.');

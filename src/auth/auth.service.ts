@@ -3,15 +3,15 @@ import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UnauthorizedException } from '@nestjs/common';
-import { accessConstants, RefreshConstants } from './constants';
 import { TokenPayloadDto } from 'src/dto/token.payload.dto';
-import { AuthRefreshReqDto } from 'src/dto/auth.refresh.req.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
     constructor(
         private userService:UserService,
-        private jwtService:JwtService
+        private jwtService:JwtService,
+        private configService:ConfigService,
     ) {}
 
     async validatePw(id:number, pw:string){
@@ -40,13 +40,13 @@ export class AuthService {
         if(!payload){
             throw new UnauthorizedException('유효하지 않은 payload입니다.')
         }
-        return await this.jwtService.sign(payload, {expiresIn: '300s', secret: accessConstants.secret});
+        return await this.jwtService.sign(payload, {expiresIn: '300s', secret: this.configService.get<string>('ACCESS_SECRET')});
     }
     async createRefreshToken(payload:TokenPayloadDto){
         if(!payload){
             throw new UnauthorizedException('유효하지 않은 payload입니다.')
         }
-        return await this.jwtService.sign(payload, {expiresIn: '7d', secret: RefreshConstants.secret});
+        return await this.jwtService.sign(payload, {expiresIn: '7d', secret: this.configService.get<string>('REFRESH_SECRET')});
     }
 
     async refresh(refreshToken:string){

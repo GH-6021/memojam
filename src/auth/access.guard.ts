@@ -1,8 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { UserService } from "src/user/user.service";
-import { accessConstants } from "./constants";
+import * as dotenv from 'dotenv';
 
+dotenv.config();
 
 @Injectable()
 export class AccessGuard implements CanActivate{
@@ -24,7 +25,7 @@ export class AccessGuard implements CanActivate{
         let payload;
         try{
             payload = await this.jwtService.verifyAsync(token,{
-                secret: accessConstants.secret
+                secret: process.env.ACCESS_SECRET,
             });
         }catch(error){
             throw new UnauthorizedException('만료되거나, 잘못된 토큰입니다.');
